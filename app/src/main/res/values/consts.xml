@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="regions_endpoint">https://api.transitapp.com/v3/feeds</string>
+</resources>
