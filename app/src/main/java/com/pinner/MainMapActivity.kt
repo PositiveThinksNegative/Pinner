@@ -12,6 +12,9 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.pinner.Regions.RegionsFetcherLiveData
+import android.location.Geocoder
+import java.util.*
+
 
 class MainMapActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -30,6 +33,12 @@ class MainMapActivity : AppCompatActivity(), OnMapReadyCallback {
 
             }
         })
+
+        Geocoder(this, Locale.getDefault()).getFromLocation(48.9, -123.5, 1)?.let {
+            if (it.size > 0) {
+                Log.d("test", it[0].countryName)
+            }
+        }
     }
 
     /**
