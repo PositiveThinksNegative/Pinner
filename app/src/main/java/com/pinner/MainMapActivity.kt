@@ -1,61 +1,80 @@
 package com.pinner
 
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.*
 import android.os.Bundle
-import android.util.Log
+import android.widget.FrameLayout
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
-
-import com.google.android.gms.maps.CameraUpdateFactory
+import androidx.lifecycle.ViewModelProviders
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.MarkerOptions
-import com.pinner.Regions.RegionsFetcherLiveData
-import android.location.Geocoder
-import java.util.*
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import kotlinx.android.synthetic.main.activity_main_map.*
 
 
 class MainMapActivity : AppCompatActivity(), OnMapReadyCallback {
 
-    private lateinit var mMap: GoogleMap
-    private val fetcherLiveData = RegionsFetcherLiveData()
+    private lateinit var viewModel: MainMapViewModel
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<FrameLayout>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_map)
+
+        viewModel = ViewModelProviders.of(this, MapViewModelFactory(application)).get(MainMapViewModel::class.java)
+
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+    }
 
-        fetcherLiveData.observe(this, Observer {
+    override fun onMapReady(googleMap: GoogleMap) {
+
+        googleMap.setOnMarkerClickListener { marker ->
+            viewModel.onMarkerClicked(marker)
+            false
+        }
+
+        viewModel.onRegionsFetched().observe(this, Observer {
             it?.let { feeds ->
+                feeds.forEach { regionObject ->
 
+                    val paint = Paint()
+                    paint.colorFilter = PorterDuffColorFilter(
+                        ContextCompat.getColor(this, regionObject.colorRes),
+                        PorterDuff.Mode.SRC_IN
+                    )
+
+                    val bitmap = BitmapFactory.decodeResource(resources, R.drawable.pin)
+                    val bitmapResult = Bitmap.createBitmap(bitmap.width / 2, bitmap.height / 2, Bitmap.Config.ARGB_8888)
+                    val canvas = Canvas(bitmapResult)
+                    val matrix = Matrix()
+                    matrix.setScale(0.5f, 0.5f)
+
+                    canvas.drawBitmap(bitmap, matrix, paint)
+
+                    val pin = BitmapDescriptorFactory.fromBitmap(bitmapResult)
+
+                    val markerOpt = MarkerOptions()
+                        .icon(pin)
+                        .position(regionObject.position)
+
+                    val marker = googleMap.addMarker(markerOpt)
+                    marker.tag = regionObject
+                }
             }
         })
 
-        Geocoder(this, Locale.getDefault()).getFromLocation(48.9, -123.5, 1)?.let {
-            if (it.size > 0) {
-                Log.d("test", it[0].countryName)
-            }
-        }
+        viewModel.onDisplayCityDetails().observe(this, Observer {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+        })
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
-    override fun onMapReady(googleMap: GoogleMap) {
-        mMap = googleMap
-
-        // Add a marker in Sydney and move the camera
-        val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
-    }
 }
