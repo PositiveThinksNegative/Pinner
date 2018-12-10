@@ -29,7 +29,7 @@ class MainMapViewModel(private val geocoder: Geocoder) : ViewModel() {
             val regionUiObject = marker.tag as RegionUiObject
 
             getAddressFromCoordinates(regionUiObject.position)?.let {
-                val markerDetails = MarkerDetailsUiObject(regionUiObject.feedName, it.featureName ?: UNKNOWN, it.countryName)
+                val markerDetails = MarkerDetailsUiObject(regionUiObject.feedName, it.locality ?: UNKNOWN, it.countryName)
                 onDisplayCityDetails.postValue(markerDetails)
             } ?: let {
                 val markerDetails = MarkerDetailsUiObject(regionUiObject.feedName, UNKNOWN, UNKNOWN)

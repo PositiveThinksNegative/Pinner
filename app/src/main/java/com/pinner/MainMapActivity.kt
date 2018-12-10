@@ -2,6 +2,7 @@ package com.pinner
 
 import android.graphics.*
 import android.os.Bundle
+import android.view.View
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -14,12 +15,14 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.android.synthetic.main.activity_main_map.*
+import kotlinx.android.synthetic.main.bottom_sheet.view.*
 
 
 class MainMapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var viewModel: MainMapViewModel
-    private lateinit var bottomSheetBehavior: BottomSheetBehavior<FrameLayout>
+
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +31,7 @@ class MainMapActivity : AppCompatActivity(), OnMapReadyCallback {
         viewModel = ViewModelProviders.of(this, MapViewModelFactory(application)).get(MainMapViewModel::class.java)
 
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
@@ -40,6 +43,10 @@ class MainMapActivity : AppCompatActivity(), OnMapReadyCallback {
         googleMap.setOnMarkerClickListener { marker ->
             viewModel.onMarkerClicked(marker)
             false
+        }
+
+        googleMap.setOnMapClickListener {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         }
 
         viewModel.onRegionsFetched().observe(this, Observer {
@@ -73,7 +80,11 @@ class MainMapActivity : AppCompatActivity(), OnMapReadyCallback {
         })
 
         viewModel.onDisplayCityDetails().observe(this, Observer {
-            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            it?.let { markerDetail ->
+                bottomSheet.cityName.text = markerDetail.cityName
+                bottomSheet.feedName.text = markerDetail.feedName
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            }
         })
     }
 

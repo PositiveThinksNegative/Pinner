@@ -1,28 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:id="@+id/bottomSheet"
-              android:layout_width="match_parent"
-              android:layout_height="340dp"
-              android:background="@android:color/darker_gray"
-              android:orientation="vertical"
-              app:behavior_hideable="true"
-              app:behavior_peekHeight="80dp"
-              app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/bottomSheet"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="@color/light_gray"
+        android:orientation="vertical"
+        app:behavior_hideable="true"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
     <TextView
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:background="@color/colorAccent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/cityName"
             android:gravity="center"
-            android:text="test"
-            android:textColor="@android:color/white" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/feedName"
+            tools:text="Montreal"
+            android:textStyle="bold"
+            android:textSize="32sp"
+            android:textColor="@android:color/black"/>
 
     <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/feedName"
             android:gravity="center"
-            android:text="test1"
-            android:textColor="@android:color/white" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cityName"
+            tools:text="STM"
+            android:textSize="24sp"
+            android:textColor="@android:color/black"/>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
