@@ -3,7 +3,7 @@ package com.pinner
 import android.graphics.*
 import android.os.Bundle
 import android.view.View
-import android.widget.FrameLayout
+import androidx.annotation.ColorRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
@@ -21,7 +21,6 @@ import kotlinx.android.synthetic.main.bottom_sheet.view.*
 class MainMapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var viewModel: MainMapViewModel
-
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,21 +51,7 @@ class MainMapActivity : AppCompatActivity(), OnMapReadyCallback {
         viewModel.onRegionsFetched().observe(this, Observer {
             it?.let { feeds ->
                 feeds.forEach { regionObject ->
-
-                    val paint = Paint()
-                    paint.colorFilter = PorterDuffColorFilter(
-                        ContextCompat.getColor(this, regionObject.colorRes),
-                        PorterDuff.Mode.SRC_IN
-                    )
-
-                    val bitmap = BitmapFactory.decodeResource(resources, R.drawable.pin)
-                    val bitmapResult = Bitmap.createBitmap(bitmap.width / 2, bitmap.height / 2, Bitmap.Config.ARGB_8888)
-                    val canvas = Canvas(bitmapResult)
-                    val matrix = Matrix()
-                    matrix.setScale(0.5f, 0.5f)
-
-                    canvas.drawBitmap(bitmap, matrix, paint)
-
+                    val bitmapResult = createColoredBitmap(regionObject.colorRes)
                     val pin = BitmapDescriptorFactory.fromBitmap(bitmapResult)
 
                     val markerOpt = MarkerOptions()
@@ -86,6 +71,20 @@ class MainMapActivity : AppCompatActivity(), OnMapReadyCallback {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
             }
         })
+    }
+
+    private fun createColoredBitmap(@ColorRes colorRes: Int) : Bitmap {
+        val paint = Paint()
+        paint.colorFilter = PorterDuffColorFilter(ContextCompat.getColor(this, colorRes), PorterDuff.Mode.SRC_IN)
+
+        val bitmap = BitmapFactory.decodeResource(resources, R.drawable.pin)
+        val bitmapResult = Bitmap.createBitmap(bitmap.width / 2, bitmap.height / 2, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmapResult)
+        val matrix = Matrix()
+        matrix.setScale(0.5f, 0.5f)
+
+        canvas.drawBitmap(bitmap, matrix, paint)
+        return bitmapResult
     }
 
 }
