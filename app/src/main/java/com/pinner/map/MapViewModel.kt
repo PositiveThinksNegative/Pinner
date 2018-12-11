@@ -7,7 +7,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.maps.model.LatLng
-import com.pinner.regions.MarkerDetailsUiObject
 import com.pinner.regions.RegionClusterItem
 import com.pinner.regions.RegionsFetcherLiveData
 import java.util.*
@@ -28,10 +27,10 @@ class MapViewModel(application: Application) : ViewModel() {
 
     fun onMarkerClicked(marker: RegionClusterItem) {
         getAddressFromCoordinates(marker.position)?.let {
-            val markerDetails = MarkerDetailsUiObject(marker.snippet, it.locality ?: it.featureName)
+            val markerDetails = MarkerDetailsUiObject(it.locality ?: it.featureName, marker.snippet)
             onDisplayCityDetails.postValue(markerDetails)
         } ?: let {
-            val markerDetails = MarkerDetailsUiObject(marker.snippet, marker.title)
+            val markerDetails = MarkerDetailsUiObject(marker.title, marker.snippet)
             onDisplayCityDetails.postValue(markerDetails)
         }
     }
