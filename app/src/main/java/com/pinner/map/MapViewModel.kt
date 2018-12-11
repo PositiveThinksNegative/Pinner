@@ -26,18 +26,19 @@ class MapViewModel(context: Context) : ViewModel() {
     }
 
     fun onMarkerClicked(marker: RegionClusterItem) {
-        val markerDetails : MarkerDetailsUiObject
 
-        if (marker.title.isNotEmpty()) {
-            markerDetails = MarkerDetailsUiObject(marker.title, marker.snippet)
-        } else {
-            markerDetails = getAddressFromCoordinates(marker.position)?.run {
-                MarkerDetailsUiObject(locality ?: featureName, marker.snippet)
+        //Prevent empty city name coming from JSON feed
+        val title = if (marker.title.isEmpty()) {
+            getAddressFromCoordinates(marker.position)?.run {
+                locality ?: featureName
             } ?: run {
-                MarkerDetailsUiObject(marker.title, marker.snippet)
+                ""
             }
+        } else {
+            marker.title
         }
 
+        val markerDetails = MarkerDetailsUiObject(title, marker.snippet)
         onDisplayCityDetails.postValue(markerDetails)
     }
 
