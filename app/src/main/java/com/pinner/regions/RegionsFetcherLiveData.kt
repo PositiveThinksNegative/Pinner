@@ -66,11 +66,11 @@ class RegionsFetcherLiveData(private val context: Context) : LiveData<List<Regio
         val france = context.resources.getString(R.string.france)
 
         return when (country) {
-            in canada -> ContextCompat.getColor(context, R.color.canada)
-            in usa -> ContextCompat.getColor(context, R.color.usa)
-            in uk -> ContextCompat.getColor(context, R.color.uk)
-            in germany -> ContextCompat.getColor(context, R.color.germany)
-            in france -> ContextCompat.getColor(context, R.color.france)
+            canada -> ContextCompat.getColor(context, R.color.canada)
+            usa -> ContextCompat.getColor(context, R.color.usa)
+            uk -> ContextCompat.getColor(context, R.color.uk)
+            germany -> ContextCompat.getColor(context, R.color.germany)
+            france -> ContextCompat.getColor(context, R.color.france)
             else -> ContextCompat.getColor(context, R.color.other)
         }
     }

@@ -2,7 +2,7 @@
 <resources>
     <string name="feed_url">https://api.transitapp.com/v3/feeds?detailed=1</string>
     <string name="canada">CA</string>
-    <string name="usa">USA</string>
+    <string name="usa">US</string>
     <string name="france">FR</string>
     <string name="germany">DE</string>
     <string name="uk">GB</string>
