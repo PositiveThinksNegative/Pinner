@@ -3,13 +3,15 @@ package com.pinner
 import android.content.res.Resources
 import android.graphics.*
 import androidx.annotation.ColorInt
+import com.google.android.gms.maps.model.BitmapDescriptor
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 
 object ColorUtil {
 
-    private val pinsMap = HashMap<Int, Bitmap>()
+    private val pinsMap = HashMap<Int, BitmapDescriptor>()
 
-    fun createColoredBitmap(resources: Resources, @ColorInt colorInt: Int): Bitmap {
-        if (pinsMap[colorInt] is Bitmap) {
+    fun createColoredBitmap(resources: Resources, @ColorInt colorInt: Int): BitmapDescriptor {
+        if (pinsMap[colorInt] is BitmapDescriptor) {
             return pinsMap[colorInt]!!
         }
 
@@ -21,9 +23,11 @@ object ColorUtil {
         val canvas = Canvas(bitmapResult)
         val matrix = Matrix()
         matrix.setScale(0.5f, 0.5f)
-
         canvas.drawBitmap(bitmap, matrix, paint)
-        pinsMap[colorInt] = bitmapResult
-        return bitmapResult
+
+        val bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmapResult)
+        pinsMap[colorInt] = bitmapDescriptor
+
+        return bitmapDescriptor
     }
 }

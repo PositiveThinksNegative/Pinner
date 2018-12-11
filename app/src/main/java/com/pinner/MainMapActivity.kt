@@ -63,11 +63,8 @@ class MainMapActivity : AppCompatActivity(), OnMapReadyCallback {
             it?.let { feeds ->
                 feeds.forEach { regionObject ->
                     val pinColor = getColorFromTimezone(regionObject.city)
-                    val bitmapResult = ColorUtil.createColoredBitmap(resources, pinColor)
-                    val pin = BitmapDescriptorFactory.fromBitmap(bitmapResult)
-
                     val markerOpt = MarkerOptions()
-                        .icon(pin)
+                        .icon(ColorUtil.createColoredBitmap(resources, pinColor))
                         .position(regionObject.position)
 
                     val marker = googleMap.addMarker(markerOpt)
