@@ -58,6 +58,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
         viewModel.onRegionsFetched().observe(this, Observer {
             it?.let { feeds ->
+                googleMap.clear()
                 feeds.forEach { regionObject ->
                     val pinColor = getColorFromTimezone(regionObject.city)
                     val markerOpt = MarkerOptions()
