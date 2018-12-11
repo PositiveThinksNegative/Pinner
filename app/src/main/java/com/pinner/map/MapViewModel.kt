@@ -13,12 +13,12 @@ import java.util.*
 
 class MapViewModel(application: Application) : ViewModel() {
 
-    private val fetcherLiveData = RegionsFetcherLiveData(application.applicationContext)
+    private val onRegionsFetched = RegionsFetcherLiveData(application.applicationContext)
     private val onDisplayCityDetails = MutableLiveData<MarkerDetailsUiObject>()
     private val geoCoder: Geocoder = Geocoder(application, Locale.getDefault())
 
     fun onRegionsFetched(): RegionsFetcherLiveData {
-        return fetcherLiveData
+        return onRegionsFetched
     }
 
     fun onDisplayCityDetails(): LiveData<MarkerDetailsUiObject> {
