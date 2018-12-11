@@ -37,11 +37,11 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
-        val clusterManager = ClusterManager<RegionClusterItem>(this, googleMap)
+        val clusterManager = ClusterManager<RegionClusterItem>(applicationContext, googleMap)
         googleMap.setOnMarkerClickListener(clusterManager)
         googleMap.setOnCameraIdleListener(clusterManager)
 
-        val mapClusterRenderer = MapClusterRenderer(this, googleMap, clusterManager)
+        val mapClusterRenderer = MapClusterRenderer(applicationContext, googleMap, clusterManager)
         mapClusterRenderer.minClusterSize = MIN_CLUSTER_SIZE
         clusterManager.renderer = mapClusterRenderer
 

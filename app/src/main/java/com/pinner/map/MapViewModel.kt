@@ -1,6 +1,6 @@
 package com.pinner.map
 
-import android.app.Application
+import android.content.Context
 import android.location.Address
 import android.location.Geocoder
 import androidx.lifecycle.LiveData
@@ -11,11 +11,11 @@ import com.pinner.regions.RegionClusterItem
 import com.pinner.regions.RegionsFetcherLiveData
 import java.util.*
 
-class MapViewModel(application: Application) : ViewModel() {
+class MapViewModel(context: Context) : ViewModel() {
 
-    private val onRegionsFetched = RegionsFetcherLiveData(application.applicationContext)
+    private val onRegionsFetched = RegionsFetcherLiveData(context)
     private val onDisplayCityDetails = MutableLiveData<MarkerDetailsUiObject>()
-    private val geoCoder: Geocoder = Geocoder(application, Locale.getDefault())
+    private val geoCoder: Geocoder = Geocoder(context, Locale.getDefault())
 
     fun onRegionsFetched(): RegionsFetcherLiveData {
         return onRegionsFetched
