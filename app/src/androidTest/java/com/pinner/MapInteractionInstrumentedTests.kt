@@ -27,17 +27,10 @@ class MapInteractionInstrumentedTests {
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    private lateinit var mapViewModel: MapViewModel
+    private val mapViewModel = MapViewModel(InstrumentationRegistry.getTargetContext())
     private val marker1 = RegionClusterItem("feed1", "city1", 2, LatLng(0.0, 0.0))
     private val marker2 = RegionClusterItem("feed2", "", 2, LatLng(45.5, -73.5))
     private val marker3 = RegionClusterItem("feed3", "", 2, LatLng(0.0, 0.0))
-
-    @Before
-    fun setup() {
-        // Context of the app under test.
-        val appContext = InstrumentationRegistry.getTargetContext()
-        mapViewModel = MapViewModel(appContext)
-    }
 
     @Test
     fun testFeedAndCityIsSame() {
