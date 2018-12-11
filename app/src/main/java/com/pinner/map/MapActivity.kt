@@ -1,39 +1,30 @@
-package com.pinner
+package com.pinner.map
 
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.maps.android.clustering.ClusterManager
+import com.pinner.R
+import com.pinner.regions.RegionClusterItem
 import kotlinx.android.synthetic.main.activity_main_map.*
 import kotlinx.android.synthetic.main.bottom_sheet.view.*
 
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
-    private lateinit var canada: List<String>
-    private lateinit var usa: List<String>
-    private lateinit var uk: List<String>
-    private lateinit var germany: List<String>
-    private lateinit var france: List<String>
     private lateinit var viewModel: MapViewModel
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_map)
-
-        canada = resources.getStringArray(R.array.canada).toList()
-        usa = resources.getStringArray(R.array.usa).toList()
-        uk = resources.getStringArray(R.array.uk).toList()
-        germany = resources.getStringArray(R.array.germany).toList()
-        france = resources.getStringArray(R.array.france).toList()
 
         viewModel = ViewModelProviders.of(this, MapViewModelFactory(application)).get(MapViewModel::class.java)
 
@@ -46,10 +37,28 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
+        val clusterManager = ClusterManager<RegionClusterItem>(this, googleMap)
+        googleMap.setOnMarkerClickListener(clusterManager)
+        googleMap.setOnCameraIdleListener(clusterManager)
 
-        googleMap.setOnMarkerClickListener { marker ->
+        val mapClusterRenderer = MapClusterRenderer(this, googleMap, clusterManager)
+        mapClusterRenderer.minClusterSize = MIN_CLUSTER_SIZE
+        clusterManager.renderer = mapClusterRenderer
+
+        clusterManager.setOnClusterItemClickListener { marker ->
             viewModel.onMarkerClicked(marker)
-            false
+
+            val cameraUpdate = CameraUpdateFactory.newLatLng(marker.position)
+            googleMap.animateCamera(cameraUpdate, CAMERA_SPEED, null)
+            true
+        }
+
+        clusterManager.setOnClusterClickListener {
+            val zoom = Math.floor(googleMap.cameraPosition.zoom.toDouble() + 1).toFloat()
+            val cameraUpdate = CameraUpdateFactory.newLatLngZoom(it.position, zoom)
+
+            googleMap.animateCamera(cameraUpdate, CAMERA_SPEED, null)
+            true
         }
 
         googleMap.setOnMapClickListener {
@@ -58,15 +67,10 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
         viewModel.onRegionsFetched().observe(this, Observer {
             it?.let { feeds ->
-                googleMap.clear()
+                clusterManager.clearItems()
                 feeds.forEach { regionObject ->
-                    val pinColor = getColorFromTimezone(regionObject.city)
-                    val markerOpt = MarkerOptions()
-                        .icon(ColorUtil.createColoredBitmap(resources, pinColor))
-                        .position(regionObject.position)
-
-                    val marker = googleMap.addMarker(markerOpt)
-                    marker.tag = regionObject
+                    clusterManager.addItem(regionObject)
+                    clusterManager.cluster()
                 }
             }
         })
@@ -80,15 +84,11 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         })
     }
 
-    private fun getColorFromTimezone(timeZone: String): Int {
-        return when (timeZone) {
-            in canada -> ContextCompat.getColor(this, R.color.canada)
-            in usa -> ContextCompat.getColor(this, R.color.usa)
-            in uk -> ContextCompat.getColor(this, R.color.uk)
-            in germany -> ContextCompat.getColor(this, R.color.germany)
-            in france -> ContextCompat.getColor(this, R.color.france)
-            else -> ContextCompat.getColor(this, R.color.other)
-        }
+    companion object {
+
+        const val CAMERA_SPEED = 300
+        const val MIN_CLUSTER_SIZE = 9
+
     }
 
 }

@@ -3,6 +3,7 @@ package com.pinner
 import android.content.res.Resources
 import android.graphics.*
 import androidx.annotation.ColorInt
+import androidx.annotation.ColorRes
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 
@@ -10,7 +11,7 @@ object ColorUtil {
 
     private val pinsMap = HashMap<Int, BitmapDescriptor>()
 
-    fun createColoredBitmap(resources: Resources, @ColorInt colorInt: Int): BitmapDescriptor {
+    fun createColoredPin(resources: Resources, @ColorInt colorInt: Int): BitmapDescriptor {
         if (pinsMap[colorInt] is BitmapDescriptor) {
             return pinsMap[colorInt]!!
         }
