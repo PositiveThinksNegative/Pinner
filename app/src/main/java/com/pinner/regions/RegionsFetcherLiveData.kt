@@ -17,11 +17,6 @@ class RegionsFetcherLiveData(private val context: Context) : LiveData<List<Regio
     private val gson = Gson()
     private val okHttpClient = OkHttpClient()
     private val feedUrl = context.resources.getString(R.string.feed_url)
-    private val canada = context.resources.getStringArray(R.array.canada).toList()
-    private val usa = context.resources.getStringArray(R.array.usa).toList()
-    private val uk = context.resources.getStringArray(R.array.uk).toList()
-    private val germany = context.resources.getStringArray(R.array.germany).toList()
-    private val france = context.resources.getStringArray(R.array.france).toList()
 
     override fun onActive() {
         super.onActive()
@@ -52,8 +47,8 @@ class RegionsFetcherLiveData(private val context: Context) : LiveData<List<Regio
             val longitude = (it.bounds.min_lon + it.bounds.max_lon) / 2
             val regionUiObject = RegionClusterItem(
                 it.code,
-                it.timezone,
-                getColorFromTimezone(it.timezone),
+                it.location,
+                getColorForCountry(it.country_code),
                 LatLng(latitude, longitude)
             )
 
@@ -63,8 +58,14 @@ class RegionsFetcherLiveData(private val context: Context) : LiveData<List<Regio
         return regionUiObjects
     }
 
-    private fun getColorFromTimezone(timeZone: String): Int {
-        return when (timeZone) {
+    private fun getColorForCountry(country: String): Int {
+        val canada = context.resources.getString(R.string.canada)
+        val usa = context.resources.getString(R.string.usa)
+        val uk = context.resources.getString(R.string.uk)
+        val germany = context.resources.getString(R.string.germany)
+        val france = context.resources.getString(R.string.france)
+
+        return when (country) {
             in canada -> ContextCompat.getColor(context, R.color.canada)
             in usa -> ContextCompat.getColor(context, R.color.usa)
             in uk -> ContextCompat.getColor(context, R.color.uk)
