@@ -37,14 +37,14 @@ class RegionsFetcherLiveData(private val context: Context) : LiveData<List<Regio
             val response = okHttpClient.newCall(request).execute()
             response.body()?.string()?.let {
                 val regionsContainer = gson.fromJson(it, RegionsContainer::class.java)
-                val regionUiObjects = convertRegionsToUiObjects(regionsContainer.feeds)
+                val regionUiObjects = convertRegionsToClusterItems(regionsContainer.feeds)
 
                 postValue(regionUiObjects)
             }
         }
     }
 
-    private fun convertRegionsToUiObjects(regions: List<Region>): List<RegionClusterItem> {
+    private fun convertRegionsToClusterItems(regions: List<Region>): List<RegionClusterItem> {
         val regionUiObjects = ArrayList<RegionClusterItem>()
 
         regions.forEach {
