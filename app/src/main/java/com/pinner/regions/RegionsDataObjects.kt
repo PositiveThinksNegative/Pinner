@@ -1,4 +1,4 @@
-package com.pinner.Regions
+package com.pinner.regions
 
 import androidx.annotation.ColorRes
 import com.google.android.gms.maps.model.LatLng

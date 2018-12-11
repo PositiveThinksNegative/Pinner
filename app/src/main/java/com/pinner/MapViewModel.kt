@@ -7,9 +7,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
-import com.pinner.Regions.MarkerDetailsUiObject
-import com.pinner.Regions.RegionUiObject
-import com.pinner.Regions.RegionsFetcherLiveData
+import com.pinner.regions.MarkerDetailsUiObject
+import com.pinner.regions.RegionUiObject
+import com.pinner.regions.RegionsFetcherLiveData
 
 class MapViewModel(private val geocoder: Geocoder) : ViewModel() {
 

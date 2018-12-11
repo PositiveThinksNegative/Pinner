@@ -1,4 +1,4 @@
-package com.pinner.Regions
+package com.pinner.regions
 
 import android.os.AsyncTask
 import androidx.lifecycle.LiveData
