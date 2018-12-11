@@ -11,4 +11,4 @@ data class Bounds(val min_lat: Double, val max_lat: Double, val min_lon: Double,
 
 data class RegionUiObject(val feedName: String, val city: String, @ColorRes val colorRes: Int, val position: LatLng)
 
-data class MarkerDetailsUiObject(val feedName: String, val cityName: String, val country: String)
+data class MarkerDetailsUiObject(val feedName: String, val cityName: String)

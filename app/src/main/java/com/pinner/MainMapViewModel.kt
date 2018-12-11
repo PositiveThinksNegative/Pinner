@@ -29,11 +29,10 @@ class MainMapViewModel(private val geocoder: Geocoder) : ViewModel() {
             val regionUiObject = marker.tag as RegionUiObject
 
             getAddressFromCoordinates(regionUiObject.position)?.let {
-                val markerDetails =
-                    MarkerDetailsUiObject(regionUiObject.feedName, it.locality ?: UNKNOWN, it.countryName)
+                val markerDetails = MarkerDetailsUiObject(regionUiObject.feedName, it.locality ?: it.featureName)
                 onDisplayCityDetails.postValue(markerDetails)
             } ?: let {
-                val markerDetails = MarkerDetailsUiObject(regionUiObject.feedName, UNKNOWN, UNKNOWN)
+                val markerDetails = MarkerDetailsUiObject(regionUiObject.feedName, regionUiObject.city)
                 onDisplayCityDetails.postValue(markerDetails)
             }
         }
@@ -44,12 +43,6 @@ class MainMapViewModel(private val geocoder: Geocoder) : ViewModel() {
             if (it.size > 0) return it[0]
         }
         return null
-    }
-
-    companion object {
-
-        private const val UNKNOWN = "Unknown"
-
     }
 
 }

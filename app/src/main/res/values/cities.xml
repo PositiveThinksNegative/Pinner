@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="canada">
+        <item>America/Montreal</item>
+        <item>America/Vancouver</item>
+        <item>America/Regina</item>
+        <item>America/Edmonton</item>
+        <item>America/Toronto</item>
+        <item>America/Glace_Bay</item>
+        <item>America/Winnipeg</item>
+        <item>America/Halifax</item>
+        <item>America/Moncton</item>
+        <item>America/St_Johns</item>
+        <item>Canada/Eastern</item>
+        <item>Canada/Pacific</item>
+        <item>Canada/Mountain</item>
+        <item>America/Thunder_Bay</item>
+    </string-array>
+
+    <string-array name="usa">
+        <item>America/New_York</item>
+        <item>America/Los_Angeles</item>
+        <item>America/Denver</item>
+        <item>America/Anchorage</item>
+        <item>America/Detroit</item>
+        <item>America/Chicago</item>
+        <item>US/Eastern</item>
+        <item>US/Central</item>
+        <item>America/Phoenix</item>
+        <item>America/Indiana/Indianapolis</item>
+        <item>America/Kentucky/Louisville</item>
+    </string-array>
+
+    <string-array name="germany">
+        <item>Europe/Berlin</item>
+    </string-array>
+
+    <string-array name="france">
+        <item>Europe/Paris</item>
+    </string-array>
+
+    <string-array name="uk">
+        <item>Europe/London</item>
+    </string-array>
+</resources>

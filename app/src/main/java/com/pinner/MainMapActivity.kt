@@ -3,7 +3,7 @@ package com.pinner
 import android.graphics.*
 import android.os.Bundle
 import android.view.View
-import androidx.annotation.ColorRes
+import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
@@ -20,12 +20,23 @@ import kotlinx.android.synthetic.main.bottom_sheet.view.*
 
 class MainMapActivity : AppCompatActivity(), OnMapReadyCallback {
 
+    private lateinit var canada: List<String>
+    private lateinit var usa: List<String>
+    private lateinit var uk: List<String>
+    private lateinit var germany: List<String>
+    private lateinit var france: List<String>
     private lateinit var viewModel: MainMapViewModel
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_map)
+
+        canada = resources.getStringArray(R.array.canada).toList()
+        usa = resources.getStringArray(R.array.usa).toList()
+        uk = resources.getStringArray(R.array.uk).toList()
+        germany = resources.getStringArray(R.array.germany).toList()
+        france = resources.getStringArray(R.array.france).toList()
 
         viewModel = ViewModelProviders.of(this, MapViewModelFactory(application)).get(MainMapViewModel::class.java)
 
@@ -51,7 +62,8 @@ class MainMapActivity : AppCompatActivity(), OnMapReadyCallback {
         viewModel.onRegionsFetched().observe(this, Observer {
             it?.let { feeds ->
                 feeds.forEach { regionObject ->
-                    val bitmapResult = createColoredBitmap(regionObject.colorRes)
+                    val pinColor = getColorFromTimezone(regionObject.city)
+                    val bitmapResult = createColoredBitmap(pinColor)
                     val pin = BitmapDescriptorFactory.fromBitmap(bitmapResult)
 
                     val markerOpt = MarkerOptions()
@@ -73,9 +85,20 @@ class MainMapActivity : AppCompatActivity(), OnMapReadyCallback {
         })
     }
 
-    private fun createColoredBitmap(@ColorRes colorRes: Int) : Bitmap {
+    private fun getColorFromTimezone(timeZone: String): Int {
+        return when (timeZone) {
+            in canada -> ContextCompat.getColor(this, R.color.canada)
+            in usa -> ContextCompat.getColor(this, R.color.usa)
+            in uk -> ContextCompat.getColor(this, R.color.uk)
+            in germany -> ContextCompat.getColor(this, R.color.germany)
+            in france -> ContextCompat.getColor(this, R.color.france)
+            else -> ContextCompat.getColor(this, R.color.other)
+        }
+    }
+
+    private fun createColoredBitmap(@ColorInt colorInt: Int): Bitmap {
         val paint = Paint()
-        paint.colorFilter = PorterDuffColorFilter(ContextCompat.getColor(this, colorRes), PorterDuff.Mode.SRC_IN)
+        paint.colorFilter = PorterDuffColorFilter(colorInt, PorterDuff.Mode.SRC_IN)
 
         val bitmap = BitmapFactory.decodeResource(resources, R.drawable.pin)
         val bitmapResult = Bitmap.createBitmap(bitmap.width / 2, bitmap.height / 2, Bitmap.Config.ARGB_8888)

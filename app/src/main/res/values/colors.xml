@@ -7,6 +7,7 @@
     <color name="usa">#e040fb</color>
     <color name="uk">#8bc34a</color>
     <color name="germany">#ffc107</color>
+    <color name="france">#3f51b5</color>
     <color name="other">#00bcd4</color>
     <color name="light_gray">#eeeeee</color>
 </resources>
