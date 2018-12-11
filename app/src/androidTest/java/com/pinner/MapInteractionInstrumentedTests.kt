@@ -1,19 +1,15 @@
 package com.pinner
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.Observer
 import androidx.test.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4
 import com.google.android.gms.maps.model.LatLng
 import com.pinner.map.MapViewModel
 import com.pinner.regions.RegionClusterItem
-
+import org.junit.Assert.assertTrue
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-
-import org.junit.Assert.*
-import org.junit.Before
-import org.junit.Rule
 
 /**
  * Instrumented test, which will execute on an Android device.
