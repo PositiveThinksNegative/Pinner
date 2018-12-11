@@ -26,15 +26,19 @@ class MapViewModel(context: Context) : ViewModel() {
     }
 
     fun onMarkerClicked(marker: RegionClusterItem) {
+        val markerDetails : MarkerDetailsUiObject
+
         if (marker.title.isNotEmpty()) {
-            val markerDetails = MarkerDetailsUiObject(marker.title, marker.snippet)
-            onDisplayCityDetails.postValue(markerDetails)
+            markerDetails = MarkerDetailsUiObject(marker.title, marker.snippet)
         } else {
-            getAddressFromCoordinates(marker.position)?.let {
-                val markerDetails = MarkerDetailsUiObject(it.locality ?: it.featureName, marker.snippet)
-                onDisplayCityDetails.postValue(markerDetails)
+            markerDetails = getAddressFromCoordinates(marker.position)?.run {
+                MarkerDetailsUiObject(locality ?: featureName, marker.snippet)
+            } ?: run {
+                MarkerDetailsUiObject(marker.title, marker.snippet)
             }
         }
+
+        onDisplayCityDetails.postValue(markerDetails)
     }
 
     private fun getAddressFromCoordinates(latLng: LatLng): Address? {
