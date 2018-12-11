@@ -11,7 +11,7 @@ import com.pinner.Regions.MarkerDetailsUiObject
 import com.pinner.Regions.RegionUiObject
 import com.pinner.Regions.RegionsFetcherLiveData
 
-class MainMapViewModel(private val geocoder: Geocoder) : ViewModel() {
+class MapViewModel(private val geocoder: Geocoder) : ViewModel() {
 
     private val fetcherLiveData = RegionsFetcherLiveData()
     private val onDisplayCityDetails = MutableLiveData<MarkerDetailsUiObject>()

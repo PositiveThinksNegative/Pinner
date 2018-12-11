@@ -43,8 +43,8 @@ class RegionsFetcherLiveData : LiveData<List<RegionUiObject>>() {
         regions.forEach {
             val latitude = (it.bounds.min_lat + it.bounds.max_lat) / 2
             val longitude = (it.bounds.min_lon + it.bounds.max_lon) / 2
-
             val regionUiObject = RegionUiObject(it.code, it.timezone, R.color.canada, LatLng(latitude, longitude))
+
             regionUiObjects.add(regionUiObject)
         }
 

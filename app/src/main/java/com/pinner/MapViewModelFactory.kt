@@ -11,7 +11,7 @@ class MapViewModelFactory(application: Application) : ViewModelProvider.Factory 
     private val geoCoder: Geocoder = Geocoder(application, Locale.getDefault())
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return MainMapViewModel(geoCoder) as T
+        return MapViewModel(geoCoder) as T
     }
 
 }

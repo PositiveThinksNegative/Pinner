@@ -1,9 +1,7 @@
 package com.pinner
 
-import android.graphics.*
 import android.os.Bundle
 import android.view.View
-import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
@@ -11,21 +9,20 @@ import androidx.lifecycle.ViewModelProviders
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.android.synthetic.main.activity_main_map.*
 import kotlinx.android.synthetic.main.bottom_sheet.view.*
 
 
-class MainMapActivity : AppCompatActivity(), OnMapReadyCallback {
+class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var canada: List<String>
     private lateinit var usa: List<String>
     private lateinit var uk: List<String>
     private lateinit var germany: List<String>
     private lateinit var france: List<String>
-    private lateinit var viewModel: MainMapViewModel
+    private lateinit var viewModel: MapViewModel
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,7 +35,7 @@ class MainMapActivity : AppCompatActivity(), OnMapReadyCallback {
         germany = resources.getStringArray(R.array.germany).toList()
         france = resources.getStringArray(R.array.france).toList()
 
-        viewModel = ViewModelProviders.of(this, MapViewModelFactory(application)).get(MainMapViewModel::class.java)
+        viewModel = ViewModelProviders.of(this, MapViewModelFactory(application)).get(MapViewModel::class.java)
 
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
